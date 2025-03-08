@@ -94,7 +94,7 @@ export default function About() {
           >
             <h3 className="text-3xl font-bold mb-6">Our Mission</h3>
             <p className="text-white/70 mb-6">
-              At Cryption, we're committed to democratizing finance through blockchain technology. Our platform provides accessible, secure, and innovative DeFi solutions that empower users worldwide.
+              At Bitbop, we're committed to democratizing finance through blockchain technology. Our platform provides accessible, secure, and innovative DeFi solutions that empower users worldwide.
             </p>
             <div className="grid grid-cols-2 gap-6">
               <div className="flex items-start space-x-4">

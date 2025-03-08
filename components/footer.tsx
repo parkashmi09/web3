@@ -22,7 +22,7 @@ export default function Footer() {
               href="/"
               className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent inline-block"
             >
-              Cryption
+              Bitbop
             </Link>
             <p className="text-white/70">
               Your comprehensive Web3 platform for DeFi banking, portfolio management, and secure crypto services. Build and grow your digital assets with confidence.
@@ -167,7 +167,7 @@ export default function Footer() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-16 pt-6 border-t border-white/10 text-center text-white/50 text-sm"
         >
-          <p> {new Date().getFullYear()} Cryption. All rights reserved.</p>
+          <p> {new Date().getFullYear()} Bitbop. All rights reserved.</p>
         </motion.div>
       </div>
     </footer>

@@ -1,11 +1,27 @@
 "use client"
 
-import { useState } from "react"
+import { useState, createContext, useContext } from "react"
 import { AnimatePresence } from "framer-motion"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import { UserProvider } from "@/context/user-context"
 import AuthModal from "@/components/auth-modal"
+
+type AuthContextType = {
+  openSignIn: () => void
+  openSignUp: () => void
+  closeAuthModal: () => void
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined)
+
+export function useAuth() {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider")
+  }
+  return context
+}
 
 export default function AuthProvider({
   children,
@@ -31,14 +47,16 @@ export default function AuthProvider({
 
   return (
     <UserProvider>
-      <div className="min-h-screen bg-black text-white relative overflow-hidden">
-        <Header onSignIn={openSignIn} />
-        {children}
-        <Footer />
-        <AnimatePresence>
-          {showAuthModal && <AuthModal type={authType} onClose={closeAuthModal} />}
-        </AnimatePresence>
-      </div>
+      <AuthContext.Provider value={{ openSignIn, openSignUp, closeAuthModal }}>
+        <div className="min-h-screen bg-black text-white relative overflow-hidden">
+          <Header onSignIn={openSignIn} />
+          {children}
+          <Footer />
+          <AnimatePresence>
+            {showAuthModal && <AuthModal type={authType} onClose={closeAuthModal} />}
+          </AnimatePresence>
+        </div>
+      </AuthContext.Provider>
     </UserProvider>
   )
 }

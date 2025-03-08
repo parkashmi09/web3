@@ -192,7 +192,7 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                   <h2 className="text-2xl font-bold">
                     Welcome to{" "}
                     <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-                      Cryption
+                      Bitbop
                     </span>
                   </h2>
                   <p className="text-white/70 mt-2">

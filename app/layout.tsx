@@ -8,7 +8,7 @@ import AuthProvider from "@/components/AuthProvider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Cryption - Web3 Crypto Platform",
+  title: "Bitbop - Web3 Crypto Platform",
   description: "A comprehensive Web3 platform for cryptocurrency trading, DeFi banking, and more",
   generator: 'v0.dev'
 }

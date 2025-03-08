@@ -3,12 +3,14 @@
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Wallet, Shield, Coins, DollarSign } from "lucide-react"
+import { useUser } from "@/context/user-context"
+import { useAuth } from "@/components/AuthProvider"
+import Link from "next/link"
 
-interface HeroProps {
-  onSignUp: () => void
-}
+export default function Hero() {
+  const { user } = useUser()
+  const { openSignUp } = useAuth()
 
-export default function Hero({ onSignUp }: HeroProps) {
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
       <div className="absolute inset-0 z-0">
@@ -43,8 +45,10 @@ export default function Hero({ onSignUp }: HeroProps) {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-lg md:text-xl text-white/70 mb-8 max-w-lg mx-auto md:mx-0"
             >
-              Experience the future of finance with our comprehensive suite of DeFi services. 
-              From banking to insurance, investments to P2P solutions - all in one secure platform.
+              {user 
+                ? `Welcome back, ${user.name}! Continue your journey in the world of decentralized finance.`
+                : "Experience the future of finance with our comprehensive suite of DeFi services. From banking to insurance, investments to P2P solutions - all in one secure platform."
+              }
             </motion.p>
             <motion.div
               initial={{ opacity: 0 }}
@@ -52,16 +56,36 @@ export default function Hero({ onSignUp }: HeroProps) {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start"
             >
-              <Button
-                onClick={onSignUp}
-                className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg"
-              >
-                Start Your Journey
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Button variant="outline" className="border-white/20 hover:bg-white/10 text-white px-8 py-6 text-lg">
-                Explore Services
-              </Button>
+              {user ? (
+                <>
+                  <Link href="/portfolio">
+                    <Button
+                      className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg w-full sm:w-auto"
+                    >
+                      Go to Dashboard
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>
+                  <Link href="/wallet">
+                    <Button variant="outline" className="border-white/20 hover:bg-white/10 text-white px-8 py-6 text-lg w-full sm:w-auto">
+                      My Wallet
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={openSignUp}
+                    className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg w-full sm:w-auto"
+                  >
+                    Start Your Journey
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                  <Button variant="outline" className="border-white/20 hover:bg-white/10 text-white px-8 py-6 text-lg w-full sm:w-auto">
+                    Explore Services
+                  </Button>
+                </>
+              )}
             </motion.div>
           </motion.div>
 
