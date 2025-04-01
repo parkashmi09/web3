@@ -7,9 +7,22 @@ import { useUser } from "@/context/user-context"
 import { useAuth } from "@/components/AuthProvider"
 import Link from "next/link"
 
-export default function Hero() {
+interface HeroProps {
+  onSignUp?: () => void
+}
+
+export default function Hero({ onSignUp }: HeroProps = {}) {
   const { user } = useUser()
   const { openSignUp } = useAuth()
+
+  // Use the provided onSignUp prop if available, otherwise use the openSignUp from context
+  const handleSignUp = () => {
+    if (onSignUp) {
+      onSignUp()
+    } else {
+      openSignUp()
+    }
+  }
 
   return (
     <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden">
@@ -75,7 +88,7 @@ export default function Hero() {
               ) : (
                 <>
                   <Button
-                    onClick={openSignUp}
+                    onClick={handleSignUp}
                     className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg w-full sm:w-auto"
                   >
                     Start Your Journey

@@ -13,10 +13,16 @@ import {
   ArrowDownRight,
   RefreshCw,
   Settings,
-  Download
+  Download,
+  Lock,
+  ArrowRight
 } from "lucide-react"
+import { useUser } from "@/context/user-context"
+import { useAuth } from "@/components/AuthProvider"
 
 export default function PortfolioPage() {
+  const { user } = useUser()
+  const { openSignIn } = useAuth()
   const [isClient, setIsClient] = useState(false)
   const [assetsCarouselRef] = useEmblaCarousel({
     align: 'start',
@@ -60,6 +66,122 @@ export default function PortfolioPage() {
     ]
   }
 
+  // If user is not logged in, show login prompt
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-black via-purple-900/10 to-black py-20">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={isClient ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <h1 className="text-3xl md:text-4xl font-bold mb-4">Portfolio Dashboard</h1>
+            <p className="text-white/70 text-lg max-w-2xl mx-auto">
+              Track, manage, and analyze your crypto investments in one place
+            </p>
+          </motion.div>
+
+          {/* Login prompt */}
+          <motion.div
+            initial={isClient ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 backdrop-blur-xl rounded-2xl p-8 border border-white/10 text-center max-w-2xl mx-auto mb-16"
+          >
+            <div className="bg-gradient-to-r from-purple-500 to-blue-500 rounded-full p-4 w-16 h-16 mx-auto mb-6 flex items-center justify-center">
+              <Lock className="w-8 h-8 text-white" />
+            </div>
+            <h3 className="text-2xl font-bold mb-4">Sign In Required</h3>
+            <p className="text-white/70 mb-8">
+              Please sign in to access your portfolio dashboard and manage your crypto assets.
+            </p>
+            <Button 
+              onClick={openSignIn}
+              className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white px-8 py-6 text-lg"
+            >
+              Sign In to Continue
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </motion.div>
+
+          {/* Preview cards */}
+          <div className="grid md:grid-cols-3 gap-6">
+            <motion.div
+              initial={isClient ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative"
+            >
+              <Card className="p-6 bg-white/5 border-white/10 backdrop-blur-sm">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center mr-4">
+                    <Wallet className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold">Portfolio Tracking</h3>
+                </div>
+                <p className="text-white/70 mb-4">Monitor all your crypto assets in one dashboard with real-time price updates</p>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-lg">
+                  <div className="text-center p-4">
+                    <Lock className="w-8 h-8 text-white/60 mx-auto mb-2" />
+                    <p className="text-white/80 font-medium">Sign in to access</p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={isClient ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="relative"
+            >
+              <Card className="p-6 bg-white/5 border-white/10 backdrop-blur-sm">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 flex items-center justify-center mr-4">
+                    <TrendingUp className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold">Performance Analytics</h3>
+                </div>
+                <p className="text-white/70 mb-4">Analyze your investment performance with detailed charts and metrics</p>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-lg">
+                  <div className="text-center p-4">
+                    <Lock className="w-8 h-8 text-white/60 mx-auto mb-2" />
+                    <p className="text-white/80 font-medium">Sign in to access</p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={isClient ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="relative"
+            >
+              <Card className="p-6 bg-white/5 border-white/10 backdrop-blur-sm">
+                <div className="flex items-center mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center mr-4">
+                    <PieChart className="w-5 h-5 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold">Asset Allocation</h3>
+                </div>
+                <p className="text-white/70 mb-4">Visualize and optimize your portfolio allocation for better returns</p>
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm rounded-lg">
+                  <div className="text-center p-4">
+                    <Lock className="w-8 h-8 text-white/60 mx-auto mb-2" />
+                    <p className="text-white/80 font-medium">Sign in to access</p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Regular portfolio page for logged in users
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-purple-900/10 to-black">
       <div className="relative py-12 sm:py-20">

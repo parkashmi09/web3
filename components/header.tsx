@@ -39,15 +39,25 @@ export default function Header({ onSignIn }: HeaderProps) {
     setIsServicesOpen(!isServicesOpen)
   }
 
-  const services = [
+  // Services available to all users
+  const publicServices = [
     { name: "DeFi Banking", icon: Building2, path: "/defi-banking" },
-    { name: "Portfolio Management", icon: LayoutDashboard, path: "/portfolio" },
-    { name: "Crypto Wallet", icon: Wallet, path: "/wallet" },
     { name: "ICO Investments", icon: Coins, path: "/ico" },
     { name: "P2P Trading", icon: Handshake, path: "/p2p" },
     { name: "Insurance", icon: Shield, path: "/insurance" },
     { name: "Investment", icon: BadgeDollarSign, path: "/investment" },
   ]
+  
+  // Services only available to logged-in users
+  const privateServices = [
+    { name: "Portfolio Management", icon: LayoutDashboard, path: "/portfolio" },
+    { name: "Crypto Wallet", icon: Wallet, path: "/wallet" },
+  ]
+  
+  // Combine services based on login status
+  const services = user 
+    ? [...publicServices, ...privateServices] 
+    : publicServices
 
   return (
     <header
@@ -112,9 +122,11 @@ export default function Header({ onSignIn }: HeaderProps) {
               )}
             </AnimatePresence>
           </div>
-          <Link href="/portfolio" className="text-white/80 hover:text-white transition-colors">
-            Portfolio
-          </Link>
+          {user && (
+            <Link href="/portfolio" className="text-white/80 hover:text-white transition-colors">
+              Portfolio
+            </Link>
+          )}
           <Link href="/defi-banking" className="text-white/80 hover:text-white transition-colors">
             DeFi
           </Link>

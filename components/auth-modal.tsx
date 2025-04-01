@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Mail, Lock, User, Phone, Facebook } from "lucide-react"
+import { X, Mail, Lock, User, Phone, Facebook, Eye, EyeOff } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -18,34 +18,154 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
   const [activeTab, setActiveTab] = useState<string>(type)
   const [showPhoneInput, setShowPhoneInput] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const { login } = useUser()
+  
+  // Form data state
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    phone_number: "",
+    address: "123 Main St, Cityville", // Default value
+    country: "United States" // Default value
+  })
+
+  // Password visibility state
+  const [showPassword, setShowPassword] = useState(false)
+  const [showSignupPassword, setShowSignupPassword] = useState(false)
+
+  // Handle form input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    
+    // Map form field IDs to formData properties
+    const fieldMap: Record<string, string> = {
+      'first-name': 'firstName',
+      'last-name': 'lastName',
+      'signup-email': 'email',
+      'signup-password': 'password',
+      'phone': 'phone_number',
+      'email': 'email',
+      'password': 'password',
+      'address': 'address',
+      'country': 'country'
+    }
+    
+    const field = fieldMap[id] || id;
+    
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  }
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSuccess(true)
-    // Mock login
-    login({
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      avatar: "/placeholder.svg?height=40&width=40",
-    })
-    // Show success animation before closing
-    setTimeout(onClose, 1500)
+    setIsLoading(true)
+    setError(null)
+    
+    try {
+      // Prepare the request body
+      const requestBody = {
+        email: formData.email,
+        password: formData.password
+      }
+      
+      // Make API request
+      const response = await fetch('https://api.bitbopbank.com/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed')
+      }
+      
+      // Store the token and user data
+      if (data.token) {
+        localStorage.setItem('token', data.token)
+        
+        // Log the user in with the returned user data
+        login({
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          // Add avatar if available
+        })
+        
+        setIsSuccess(true)
+        // Show success animation before closing
+        setTimeout(onClose, 1500)
+      }
+    } catch (err) {
+      console.error('Login error:', err)
+      setError(err instanceof Error ? err.message : 'Failed to login. Please check your credentials and try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSuccess(true)
-    // Mock signup then login
-    login({
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      avatar: "/placeholder.svg?height=40&width=40",
-    })
-    // Show success animation before closing
-    setTimeout(onClose, 1500)
+    setIsLoading(true)
+    setError(null)
+    
+    try {
+      // Prepare the request body
+      const requestBody = {
+        name: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        password: formData.password,
+        phone_number: formData.phone_number || "+1234567890", // Use default if not provided
+        address: formData.address,
+        country: formData.country
+      }
+      
+      // Make API request
+      const response = await fetch('https://api.bitbopbank.com/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestBody)
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed')
+      }
+      
+      // Store the token and user data
+      if (data.token) {
+        localStorage.setItem('token', data.token)
+        
+        // Log the user in with the returned user data
+        login({
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          // Add avatar if available
+        })
+        
+        setIsSuccess(true)
+        // Show success animation before closing
+        setTimeout(onClose, 1500)
+      }
+    } catch (err) {
+      console.error('Signup error:', err)
+      setError(err instanceof Error ? err.message : 'Failed to register. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleSocialLogin = async (provider: string) => {
@@ -53,31 +173,17 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
       setShowPhoneInput(true)
       return
     }
-    setIsSuccess(true)
-    // Mock social login
-    login({
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      avatar: "/placeholder.svg?height=40&width=40",
-    })
-    // Show success animation before closing
-    setTimeout(onClose, 1500)
+    
+    // Display error message for unimplemented social logins
+    setError(`${provider.charAt(0).toUpperCase() + provider.slice(1)} login is not implemented yet.`)
   }
 
   const handlePhoneLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setShowPhoneInput(false)
-    setIsSuccess(true)
-    // Mock phone login
-    login({
-      id: "1",
-      name: "John Doe",
-      email: "john@example.com",
-      avatar: "/placeholder.svg?height=40&width=40",
-    })
-    // Show success animation before closing
-    setTimeout(onClose, 1500)
+    
+    // Display error message for unimplemented phone login
+    setError("Phone authentication is not implemented yet.")
   }
 
   return (
@@ -156,6 +262,8 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                         type="tel"
                         placeholder="+1 (234) 567-8900"
                         className="pl-10 bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                        value={formData.phone_number}
+                        onChange={handleInputChange}
                         required
                       />
                     </div>
@@ -191,7 +299,7 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                 <div className="text-center mb-6">
                   <h2 className="text-2xl font-bold">
                     Welcome to{" "}
-                    <span className="bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
+                    <span className="bg-gradient-to-br from-purple-500 to-blue-500 bg-clip-text text-transparent">
                       Bitbop
                     </span>
                   </h2>
@@ -199,6 +307,12 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                     {activeTab === "signin" ? "Sign in to access your account" : "Create an account to get started"}
                   </p>
                 </div>
+
+                {error && (
+                  <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-md text-sm text-white">
+                    {error}
+                  </div>
+                )}
 
                 <Tabs defaultValue={type} value={activeTab} onValueChange={setActiveTab} className="w-full">
                   <TabsList className="grid w-full grid-cols-2 mb-8">
@@ -219,6 +333,8 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                             type="email"
                             placeholder="Enter your email"
                             className="pl-10 bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                            value={formData.email}
+                            onChange={handleInputChange}
                             required
                           />
                         </div>
@@ -237,19 +353,31 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                           <Input
                             id="password"
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             placeholder="Enter your password"
                             className="pl-10 bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                            value={formData.password}
+                            onChange={handleInputChange}
                             required
                           />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </Button>
                         </div>
                       </div>
 
                       <Button
                         type="submit"
+                        disabled={isLoading}
                         className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
                       >
-                        Sign In
+                        {isLoading ? "Signing In..." : "Sign In"}
                       </Button>
                     </form>
 
@@ -327,6 +455,8 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                               id="first-name"
                               placeholder="John"
                               className="pl-10 bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                              value={formData.firstName}
+                              onChange={handleInputChange}
                               required
                             />
                           </div>
@@ -339,6 +469,8 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                             id="last-name"
                             placeholder="Doe"
                             className="bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                            value={formData.lastName}
+                            onChange={handleInputChange}
                             required
                           />
                         </div>
@@ -355,6 +487,8 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                             type="email"
                             placeholder="john@example.com"
                             className="pl-10 bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                            value={formData.email}
+                            onChange={handleInputChange}
                             required
                           />
                         </div>
@@ -368,19 +502,59 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
                           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/50" />
                           <Input
                             id="signup-password"
-                            type="password"
+                            type={showSignupPassword ? "text" : "password"}
                             placeholder="Create a password"
                             className="pl-10 bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                            value={formData.password}
+                            onChange={handleInputChange}
                             required
                           />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/50 hover:text-white"
+                            onClick={() => setShowSignupPassword(!showSignupPassword)}
+                          >
+                            {showSignupPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                          </Button>
                         </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label htmlFor="address" className="text-sm text-white/70">
+                          Address
+                        </label>
+                        <Input
+                          id="address"
+                          placeholder="Your address"
+                          className="bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                          value={formData.address}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <label htmlFor="country" className="text-sm text-white/70">
+                          Country
+                        </label>
+                        <Input
+                          id="country"
+                          placeholder="Your country"
+                          className="bg-white/5 border-white/10 focus-visible:ring-purple-500"
+                          value={formData.country}
+                          onChange={handleInputChange}
+                          required
+                        />
                       </div>
 
                       <Button
                         type="submit"
+                        disabled={isLoading}
                         className="w-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
                       >
-                        Create Account
+                        {isLoading ? "Creating Account..." : "Create Account"}
                       </Button>
                     </form>
 
