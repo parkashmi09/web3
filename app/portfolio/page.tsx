@@ -257,7 +257,7 @@ export default function PortfolioPage() {
               </div>
             
               {/* Wallet Header */}
-              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-xl border border-gray-700/50">
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 md:p-8 shadow-xl border border-gray-700/50">
                 <div className="flex flex-col space-y-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
@@ -272,10 +272,10 @@ export default function PortfolioPage() {
                   </div>
                   
                   <div className="flex items-end justify-between">
-                    <div>
-                      <div className="flex items-center space-x-3">
-                        <h1 className="text-4xl font-bold text-white">{formatNumber(getWalletValue(selectedCoin))}</h1>
-                        <div className="relative" ref={dropdownRef}>
+                    <div className="w-full">
+                      <div className="flex items-center space-x-3 flex-wrap md:flex-nowrap">
+                        <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 md:mb-0">{formatNumber(getWalletValue(selectedCoin))}</h1>
+                        <div className="relative w-full md:w-auto" ref={dropdownRef}>
                           <div 
                             className="flex items-center space-x-2 bg-gray-700/50 hover:bg-gray-700 px-3 py-2 rounded-lg cursor-pointer transition-colors"
                             onClick={() => setShowCoinDropdown(!showCoinDropdown)}
@@ -288,51 +288,72 @@ export default function PortfolioPage() {
                           </div>
                           
                           {showCoinDropdown && (
-                            <div className="absolute top-full left-0 mt-2 w-64 bg-gray-800 rounded-lg shadow-lg z-10 border border-gray-700/50 overflow-hidden">
-                              <div className="p-3 border-b border-gray-700">
-                                <div className="relative">
-                                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
-                                  <Input
-                                    placeholder="Search currency"
-                                    className="pl-9 bg-gray-700 border-gray-600 focus:ring-purple-500 text-sm"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                  />
+                            <>
+                              {/* Mobile overlay */}
+                              <div 
+                                className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                                onClick={() => setShowCoinDropdown(false)}
+                              ></div>
+                              
+                              {/* Dropdown content */}
+                              <div className="fixed bottom-0 left-0 right-0 z-50 md:absolute md:bottom-auto md:inset-auto md:top-full md:left-0 md:mt-2 w-full md:w-80 bg-[#1a2235] md:rounded-lg shadow-xl overflow-hidden border border-gray-800/50 rounded-t-xl md:rounded-xl">
+                                <div className="flex md:hidden justify-between items-center p-4 border-b border-gray-800/50">
+                                  <h3 className="font-medium text-lg text-white">Select Currency</h3>
+                                  <button 
+                                    className="p-2 rounded-full bg-gray-800/80 hover:bg-gray-700"
+                                    onClick={() => setShowCoinDropdown(false)}
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-gray-400">
+                                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                                    </svg>
+                                  </button>
+                                </div>
+                                <div className="p-4 border-b border-gray-800/50 sticky top-0 bg-[#1a2235] z-20">
+                                  <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
+                                    <Input
+                                      placeholder="Search currency"
+                                      className="pl-9 bg-[#232b3e] border-gray-700/50 focus:ring-purple-500 text-sm text-white"
+                                      value={searchQuery}
+                                      onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="overflow-y-auto py-0 max-h-[60vh] md:max-h-80">
+                                  {Object.entries(cryptoInfo)
+                                    .filter(([key, coin]) => 
+                                      coin.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
+                                    )
+                                    .map(([key, coin]) => (
+                                      <div
+                                        key={key}
+                                        className={`flex items-center px-4 py-5 hover:bg-[#232b3e] cursor-pointer transition-colors ${
+                                          key === selectedCoin ? "bg-[#232b3e]" : ""
+                                        }`}
+                                        onClick={() => {
+                                          setSelectedCoin(key);
+                                          setShowCoinDropdown(false);
+                                        }}
+                                      >
+                                        <div 
+                                          className={`w-12 h-12 rounded-full bg-gradient-to-r mr-4 flex items-center justify-center text-xl text-white font-bold ${coin.color}`}
+                                        >
+                                          {coin.symbol.charAt(0)}
+                                        </div>
+                                        <div className="flex flex-col">
+                                          <span className="font-medium text-white text-lg">{coin.symbol}</span>
+                                          <span className="text-sm text-gray-400">{coin.name}</span>
+                                        </div>
+                                        <div className="ml-auto text-right">
+                                          <span className="text-white">{formatNumber(getWalletValue(key))}</span>
+                                        </div>
+                                      </div>
+                                    ))}
                                 </div>
                               </div>
-                              <div className="max-h-60 overflow-y-auto py-2">
-                                {Object.entries(cryptoInfo)
-                                  .filter(([key, coin]) => 
-                                    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                    coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-                                  )
-                                  .map(([key, coin]) => (
-                                    <div
-                                      key={key}
-                                      className={`flex items-center p-3 hover:bg-gray-700 cursor-pointer transition-colors ${
-                                        key === selectedCoin ? "bg-gray-700" : ""
-                                      }`}
-                                      onClick={() => {
-                                        setSelectedCoin(key);
-                                        setShowCoinDropdown(false);
-                                      }}
-                                    >
-                                      <div 
-                                        className={`w-8 h-8 rounded-full bg-gradient-to-r mr-3 flex items-center justify-center text-xs text-white font-bold ${coin.color}`}
-                                      >
-                                        {coin.symbol.charAt(0)}
-                                      </div>
-                                      <div className="flex flex-col">
-                                        <span className="font-medium">{coin.symbol}</span>
-                                        <span className="text-xs text-gray-400">{coin.name}</span>
-                                      </div>
-                                      <div className="ml-auto text-right">
-                                        <span className="text-sm">{formatNumber(getWalletValue(key))}</span>
-                                      </div>
-                                    </div>
-                                  ))}
-                              </div>
-                            </div>
+                            </>
                           )}
                         </div>
                       </div>
@@ -368,14 +389,20 @@ export default function PortfolioPage() {
               <div className="border-b border-gray-800">
                 <div className="flex">
                   <button
-                    className={`py-2 px-4 font-medium ${
+                    className={`py-2 px-4 font-medium relative ${
                       activeTab === "crypto"
-                        ? "text-white border-b-2 border-yellow-500"
+                        ? "text-white"
                         : "text-gray-400"
                     }`}
                     onClick={() => setActiveTab("crypto")}
                   >
                     Crypto
+                    {activeTab === "crypto" && (
+                      <motion.div 
+                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500"
+                        layoutId="tabIndicator"
+                      />
+                    )}
                   </button>
                 </div>
               </div>
@@ -384,8 +411,8 @@ export default function PortfolioPage() {
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
                 <Input
-                  placeholder="Search"
-                  className="pl-10 bg-gray-800 border-gray-700"
+                  placeholder="Search cryptocurrencies"
+                  className="pl-10 bg-gray-800 border-gray-700 focus:border-purple-500 focus:ring-purple-500/20"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -394,103 +421,143 @@ export default function PortfolioPage() {
               {/* Coin List */}
               <div className="space-y-4">
                 {/* BITBOP */}
-                <div className="flex items-center justify-between p-4 hover:bg-gray-800 rounded-lg transition-colors">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center justify-between p-4 hover:bg-gray-800/50 bg-gray-800/20 rounded-xl transition-colors border border-gray-700/30"
+                >
                   <div className="flex items-center">
                     <div className={`w-10 h-10 rounded-full bg-gradient-to-r mr-3 flex items-center justify-center text-lg font-bold text-white ${cryptoInfo.bitbop.color}`}>
                       B
                     </div>
                     <div>
-                      <div className="flex items-center">
+                      <div className="flex flex-col md:flex-row md:items-center">
                         <h3 className="font-medium">BITBOP</h3>
-                        <span className="ml-2 text-sm text-gray-400">Bitbop</span>
+                        <span className="md:ml-2 text-xs text-gray-400">Bitbop</span>
                       </div>
+                      <span className="text-xs px-2 py-0.5 bg-purple-500/20 text-purple-300 rounded-full hidden md:inline-block mt-1">Native</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="font-medium">{formatNumber(getWalletValue('bitbop'))}</p>
-                    <p className="text-sm text-gray-400">$0.00</p>
+                    <p className="text-xs text-gray-400">$0.00</p>
                   </div>
-                </div>
+                </motion.div>
                 
                 {/* USDT */}
-                <div className="flex items-center justify-between p-4 hover:bg-gray-800 rounded-lg transition-colors">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="flex items-center justify-between p-4 hover:bg-gray-800/50 bg-gray-800/20 rounded-xl transition-colors border border-gray-700/30"
+                >
                   <div className="flex items-center">
                     <div className={`w-10 h-10 rounded-full bg-gradient-to-r mr-3 flex items-center justify-center text-lg font-bold text-white ${cryptoInfo.usdt.color}`}>
                       U
                     </div>
                     <div>
-                      <div className="flex items-center">
+                      <div className="flex flex-col md:flex-row md:items-center">
                         <h3 className="font-medium">USDT</h3>
-                        <span className="ml-2 text-sm text-gray-400">Tether</span>
+                        <span className="md:ml-2 text-xs text-gray-400">Tether</span>
                       </div>
+                      <span className="text-xs px-2 py-0.5 bg-green-500/20 text-green-300 rounded-full hidden md:inline-block mt-1">Stablecoin</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="font-medium">{formatNumber(getWalletValue('usdt'))}</p>
-                    <p className="text-sm text-gray-400">$0.00</p>
+                    <p className="text-xs text-gray-400">$0.00</p>
                   </div>
-                </div>
+                </motion.div>
                 
                 {/* BTC */}
-                <div className="flex items-center justify-between p-4 hover:bg-gray-800 rounded-lg transition-colors">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="flex items-center justify-between p-4 hover:bg-gray-800/50 bg-gray-800/20 rounded-xl transition-colors border border-gray-700/30"
+                >
                   <div className="flex items-center">
                     <div className={`w-10 h-10 rounded-full bg-gradient-to-r mr-3 flex items-center justify-center text-lg font-bold text-white ${cryptoInfo.btc.color}`}>
                       B
                     </div>
                     <div>
-                      <div className="flex items-center">
+                      <div className="flex flex-col md:flex-row md:items-center">
                         <h3 className="font-medium">BTC</h3>
-                        <span className="ml-2 text-sm text-gray-400">Bitcoin</span>
+                        <span className="md:ml-2 text-xs text-gray-400">Bitcoin</span>
                       </div>
+                      <span className="text-xs px-2 py-0.5 bg-orange-500/20 text-orange-300 rounded-full hidden md:inline-block mt-1">Top Cap</span>
                     </div>
                   </div>
                   <div className="text-right">
                     <p className="font-medium">{formatNumber(getWalletValue('btc'))}</p>
-                    <p className="text-sm text-gray-400">$0.00</p>
+                    <p className="text-xs text-gray-400">$0.00</p>
                   </div>
-                </div>
+                </motion.div>
                 
                 {/* Dynamic list for other coins */}
                 {getCoinsWithBalances()
                   .filter(coin => !['bitbop', 'usdt', 'btc'].includes(coin.key))
-                  .map((coin) => (
-                    <div 
+                  .map((coin, index) => (
+                    <motion.div 
                       key={coin.key}
-                      className="flex items-center justify-between p-4 hover:bg-gray-800 rounded-lg transition-colors"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: 0.2 + (index * 0.1) }}
+                      className="flex items-center justify-between p-4 hover:bg-gray-800/50 bg-gray-800/20 rounded-xl transition-colors border border-gray-700/30"
                     >
                       <div className="flex items-center">
                         <div className={`w-10 h-10 rounded-full bg-gradient-to-r mr-3 flex items-center justify-center text-lg font-bold text-white ${coin.color}`}>
                           {coin.symbol.charAt(0)}
                         </div>
                         <div>
-                          <div className="flex items-center">
+                          <div className="flex flex-col md:flex-row md:items-center">
                             <h3 className="font-medium">{coin.symbol}</h3>
-                            <span className="ml-2 text-sm text-gray-400">{coin.name}</span>
+                            <span className="md:ml-2 text-xs text-gray-400">{coin.name}</span>
                           </div>
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">{formatNumber(coin.amount)}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))
                 }
                 
                 {getCoinsWithBalances().length === 0 && (
-                  <div className="text-center py-8 text-gray-400">
-                    <p>No cryptocurrencies found in your wallet</p>
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    className="text-center py-12 px-4 bg-gray-800/20 rounded-xl border border-gray-700/30"
+                  >
+                    <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-700/50 flex items-center justify-center">
+                      <RefreshCw className="h-8 w-8 text-gray-400" />
+                    </div>
+                    <p className="text-gray-300 font-medium">No cryptocurrencies found in your wallet</p>
+                    <p className="text-sm text-gray-400 mt-2 mb-6">Your wallet is empty or no results match your search</p>
                     <Button 
-                      className="mt-4 bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+                      className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
                     >
                       Add Crypto
                     </Button>
-                  </div>
+                  </motion.div>
                 )}
               </div>
             </div>
           ) : (
-            <div className="flex justify-center items-center py-12">
-              <p className="text-gray-400">No wallet data available</p>
+            <div className="flex flex-col justify-center items-center py-12 px-4 bg-gray-800/20 rounded-xl border border-gray-700/30 text-center">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-700/50 flex items-center justify-center">
+                <RefreshCw className="h-8 w-8 text-gray-400" />
+              </div>
+              <p className="text-gray-300 font-medium">No wallet data available</p>
+              <p className="text-sm text-gray-400 mt-2 mb-6">Try refreshing the page or contact support</p>
+              <Button 
+                onClick={() => window.location.reload()}
+                className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+              >
+                Refresh
+              </Button>
             </div>
           )}
         </div>
