@@ -146,7 +146,7 @@ export default function Home() {
         <div className="relative">
           <DeFiBanking />
           <Insurance />
-          <Portfolio/>
+          {/* <Portfolio/> */}
           <ICO />
           <P2P />
           <CryptoWallet />

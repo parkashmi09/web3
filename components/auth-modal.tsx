@@ -29,8 +29,8 @@ export default function AuthModal({ type, onClose }: AuthModalProps) {
     email: "",
     password: "",
     phone_number: "",
-    address: "123 Main St, Cityville", // Default value
-    country: "United States" // Default value
+    address: "", // Default value
+    country: "" // Default value
   })
 
   // Password visibility state
