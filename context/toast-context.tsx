@@ -49,7 +49,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             key={t.id}
             className={`fixed top-4 right-4 z-[9999] p-4 rounded-lg shadow-lg border flex flex-col gap-1 ${
               t.variant === "success"
-                ? "bg-green-500/20 border-green-500/50 text-green-300"
+                ? "bg-green-500 border-green-500/50 text-green-300"
                 : t.variant === "destructive"
                 ? "bg-red-500/20 border-red-500/50 text-red-300"
                 : "bg-gray-800 border-gray-700 text-white"
