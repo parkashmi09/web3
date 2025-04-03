@@ -47,7 +47,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <Toast
             key={t.id}
-            className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg border flex flex-col gap-1 ${
+            className={`fixed top-4 right-4 z-[9999] p-4 rounded-lg shadow-lg border flex flex-col gap-1 ${
               t.variant === "success"
                 ? "bg-green-500/20 border-green-500/50 text-green-300"
                 : t.variant === "destructive"
