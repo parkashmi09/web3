@@ -164,25 +164,25 @@ export default function DefiBanking() {
         >
           <div className="text-center">
             <h4 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-              $5B+
+              $5M+
             </h4>
             <p className="text-white/70">Total Value Locked</p>
           </div>
           <div className="text-center">
             <h4 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-              12%
+              8%
             </h4>
-            <p className="text-white/70">Average APY</p>
+            <p className="text-white/70">Monthly Return <span className="text-xs opacity-70">(96% APY)</span></p>
           </div>
           <div className="text-center">
             <h4 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-cyan-500 to-purple-500 bg-clip-text text-transparent">
-              1M+
+              96K+
             </h4>
             <p className="text-white/70">Active Users</p>
           </div>
           <div className="text-center">
             <h4 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-              0.1%
+              0.01%
             </h4>
             <p className="text-white/70">Transaction Fee</p>
           </div>

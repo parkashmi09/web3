@@ -167,7 +167,8 @@ export default function Footer() {
           transition={{ duration: 0.5, delay: 0.4 }}
           className="mt-16 pt-6 border-t border-white/10 text-center text-white/50 text-sm"
         >
-          <p> {new Date().getFullYear()} Bitbop. All rights reserved.</p>
+          <p>@bitbop defi banking & banking AIO</p>
+          {/* <p> {new Date().getFullYear()} Bitbop. All rights reserved.</p> */}
         </motion.div>
       </div>
     </footer>

@@ -7,7 +7,6 @@ import Services from "@/components/services"
 import Insurance from "@/components/insurance"
 import About from "@/components/about"
 import DeFiBanking from "@/components/defi-banking"
-import Portfolio from "@/components/portfolio"
 import ICO from "@/components/ico"
 import P2P from "@/components/p2p"
 import CryptoWallet from "@/components/wallet"
@@ -155,7 +154,7 @@ export default function Home() {
       </div>
       
       {/* About Section */}
-      <About />
+      {/* <About /> */}
     </main>
   )
 }

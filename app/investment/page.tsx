@@ -1,10 +1,11 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { motion } from "framer-motion"
 import { TrendingUp, PieChart, Lock, ArrowRight, LineChart, Sparkles, BarChart4, Wallet } from "lucide-react"
-import { Button } from "./ui/button"
 
-export default function Investment() {
+
+export default function Page() {
   return (
     <section className="py-20 bg-black/50 relative overflow-hidden">
       {/* Background gradient effects */}

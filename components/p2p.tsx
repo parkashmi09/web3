@@ -130,7 +130,7 @@ export default function P2P() {
             className="text-center p-6"
           >
             <div className="text-3xl font-bold mb-2">100+</div>
-            <p className="text-white/70">Payment Methods</p>
+            <p className="text-white/70">Crypto Support</p>
           </motion.div>
 
           <motion.div

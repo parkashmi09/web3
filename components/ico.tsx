@@ -119,7 +119,7 @@ export default function ICO() {
             <div className="text-3xl font-bold mb-2">$50M+</div>
             <p className="text-white/70">Total Funds Raised</p>
           </motion.div>
-
+{/* 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -128,7 +128,7 @@ export default function ICO() {
           >
             <div className="text-3xl font-bold mb-2">50+</div>
             <p className="text-white/70">Successful ICOs</p>
-          </motion.div>
+          </motion.div> */}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -136,7 +136,7 @@ export default function ICO() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="text-center p-6"
           >
-            <div className="text-3xl font-bold mb-2">100K+</div>
+            <div className="text-3xl font-bold mb-2">90K+</div>
             <p className="text-white/70">Global Investors</p>
           </motion.div>
         </div>

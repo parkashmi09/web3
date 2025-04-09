@@ -187,13 +187,13 @@ export default function Insurance() {
         >
           <div>
             <h4 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-500 to-blue-500 bg-clip-text text-transparent">
-              $500M+
+              $504M+
             </h4>
             <p className="text-white/70">Claims Paid</p>
           </div>
           <div>
             <h4 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
-              100K+
+              96K+
             </h4>
             <p className="text-white/70">Protected Users</p>
           </div>
