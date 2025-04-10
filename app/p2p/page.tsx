@@ -75,7 +75,7 @@ export default function P2PPage() {
       <div className="relative h-[30vh] sm:h-[40vh] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-xl" />
         <div className="absolute inset-0 bg-[url('/images/p2p-bg.jpg')] bg-cover bg-center opacity-20" />
-        <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+        <div style={{marginTop:"60px"}}  className="relative z-10 container mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl">
             <motion.h1 
               initial={isClient ? { opacity: 0, y: 20 } : { opacity: 1, y: 0 }}

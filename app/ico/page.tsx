@@ -21,7 +21,7 @@ export default function ICOPage() {
       <div className="relative h-[40vh] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-xl" />
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1620325867502-221cfb739145')] bg-cover bg-center opacity-20" />
-        <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
+        <div style={{marginTop:"60px"}}  className="relative z-10 container mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl">
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
