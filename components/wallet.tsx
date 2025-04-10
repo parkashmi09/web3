@@ -156,7 +156,7 @@ export default function CryptoWallet() {
           >
             <div className="flex items-center justify-center gap-1">
               <span className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">5-8%</span>
-              <Percent className="w-5 h-5 text-purple-500" />
+              {/* <Percent className="w-5 h-5 text-purple-500" /> */}
             </div>
             <p className="text-white/70">Monthly Returns</p>
           </motion.div>
