@@ -36,7 +36,7 @@ export default function ICO() {
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-xl font-semibold mb-1">Bitbop Coin</h4>
-                  <p className="text-white/70">Next-gen virtual reality platform</p>
+                  <p className="text-white/70">NextGen defi banking and Crypto Plateform</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-white/70">Raised</p>
