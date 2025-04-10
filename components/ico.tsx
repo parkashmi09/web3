@@ -35,12 +35,12 @@ export default function ICO() {
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h4 className="text-xl font-semibold mb-1">MetaVerse Token</h4>
+                  <h4 className="text-xl font-semibold mb-1">Bitbop Coin</h4>
                   <p className="text-white/70">Next-gen virtual reality platform</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-white/70">Raised</p>
-                  <p className="text-xl font-semibold text-purple-500">$2.5M / $5M</p>
+                  <p className="text-xl font-semibold text-purple-500"> $5M</p>
                 </div>
               </div>
               

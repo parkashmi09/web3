@@ -63,7 +63,7 @@ export default function ICOPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[
             {
-              name: "MetaVerse Token",
+              name: "Bitbop Coin",
               symbol: "MVT",
               raised: "5.2M",
               goal: "10M",
