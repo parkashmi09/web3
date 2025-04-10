@@ -72,7 +72,7 @@ export default function P2PPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-purple-900/10 to-black">
       {/* Hero Section */}
-      <div className="relative h-[30vh] sm:h-[40vh] overflow-hidden">
+      <div className="relative h-[50vh] sm:h-[60vh] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-xl" />
         <div className="absolute inset-0 bg-[url('/images/p2p-bg.jpg')] bg-cover bg-center opacity-20" />
         <div style={{marginTop:"60px"}}  className="relative z-10 container mx-auto px-4 h-full flex items-center">
